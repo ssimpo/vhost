@@ -5,7 +5,7 @@ var request = require('supertest');
 var vhost = require('..');
 
 describe('vhost(hostname, server)', function(){
-  it('should route by Host', function(done){
+  it('Should route by Host', function(done){
     var vhosts = [];
 
     vhosts.push(vhost('tobi.com', tobi));
@@ -22,7 +22,7 @@ describe('vhost(hostname, server)', function(){
     .expect(200, 'tobi', done);
   });
 
-  it('should ignore port in Host', function(done){
+  it('Should ignore port in Host', function(done){
     var app = createServer('tobi.com', function (req, res) {
       res.end('tobi');
     });
@@ -33,7 +33,7 @@ describe('vhost(hostname, server)', function(){
     .expect(200, 'tobi', done);
   });
 
-  it('should support IPv6 literal in Host', function(done){
+  it('Should support IPv6 literal in Host', function(done){
     var app = createServer('[::1]', function (req, res) {
       res.end('loopback');
     })
@@ -44,7 +44,7 @@ describe('vhost(hostname, server)', function(){
     .expect(200, 'loopback', done);
   });
 
-  it('should 404 unless matched', function(done){
+  it('Should 404 unless matched', function(done){
     var vhosts = [];
 
     vhosts.push(vhost('tobi.com', tobi));
@@ -61,7 +61,7 @@ describe('vhost(hostname, server)', function(){
     .expect(404, done);
   });
 
-  it('should 404 without Host header', function(done){
+  it('Should 404 without Host header', function(done){
     var vhosts = [];
 
     vhosts.push(vhost('tobi.com', tobi));
@@ -78,40 +78,40 @@ describe('vhost(hostname, server)', function(){
     .expect(404, done);
   });
 
-  describe('arguments', function(){
+  describe('Arguments', function(){
     describe('hostname', function(){
-      it('should be required', function(){
+      it('Should be required', function(){
         assert.throws(vhost.bind(), /hostname.*required/);
       });
 
-      it('should accept string', function(){
+      it('Should accept string', function(){
         assert.doesNotThrow(vhost.bind(null, 'loki.com', function(){}));
       });
 
-      it('should accept RegExp', function(){
+      it('Should accept RegExp', function(){
         assert.doesNotThrow(vhost.bind(null, /loki\.com/, function(){}));
       });
     });
 
-    describe('handle', function(){
-      it('should be required', function(){
+    describe('Handle', function(){
+      it('Should be required', function(){
         assert.throws(vhost.bind(null, 'loki.com'), /handle.*required/);
       });
 
-      it('should accept function', function(){
+      it('Should accept function', function(){
         assert.doesNotThrow(vhost.bind(null, 'loki.com', function(){}));
       });
 
-      it('should reject plain object', function(){
+      it('Should reject plain object', function(){
         assert.throws(vhost.bind(null, 'loki.com', {}), /handle.*function/);
       });
     });
   });
 
-  describe('with string hostname', function(){
-    it('should support wildcards', function(done){
+  describe('With string hostname', function(){
+    it('Should support wildcards', function(done){
       var app = createServer('*.ferrets.com', function(req, res){
-        res.end('wildcard!');
+        res.end('Wildcard!');
       });
 
       request(app)
@@ -120,7 +120,7 @@ describe('vhost(hostname, server)', function(){
       .expect(200, 'wildcard!', done);
     });
 
-    it('should restrict wildcards to single part', function(done){
+    it('Should restrict wildcards to single part', function(done){
       var app = createServer('*.ferrets.com', function(req, res){
         res.end('wildcard!');
       });
@@ -131,7 +131,7 @@ describe('vhost(hostname, server)', function(){
       .expect(404, done);
     });
 
-    it('should treat dot as a dot', function(done){
+    it('Should treat dot as a dot', function(done){
       var app = createServer('a.b.com', function(req, res){
         res.end('tobi');
       });
@@ -142,7 +142,7 @@ describe('vhost(hostname, server)', function(){
       .expect(404, done);
     });
 
-    it('should match entire string', function(done){
+    it('Should match entire string', function(done){
       var app = createServer('.com', function(req, res){
         res.end('commercial');
       });
@@ -153,7 +153,7 @@ describe('vhost(hostname, server)', function(){
       .expect(404, done);
     });
 
-    it('should populate req.vhost', function(done){
+    it('Should populate req.vhost', function(done){
       var app = createServer('user-*.*.com', function(req, res){
         var keys = Object.keys(req.vhost).sort();
         var arr = keys.map(function(k){ return [k, req.vhost[k]]; })
@@ -167,8 +167,8 @@ describe('vhost(hostname, server)', function(){
     });
   });
 
-  describe('with RegExp hostname', function(){
-    it('should match using RegExp', function(done){
+  describe('With RegExp hostname', function(){
+    it('Should match using RegExp', function(done){
       var app = createServer(/[tl]o[bk]i\.com/, function(req, res){
         res.end('tobi');
       })
@@ -179,7 +179,7 @@ describe('vhost(hostname, server)', function(){
       .expect(200, 'tobi', done);
     });
 
-    it('should match entire hostname', function(done){
+    it('Should match entire hostname', function(done){
       var vhosts = [];
 
       vhosts.push(vhost(/\.tobi$/, tobi));
@@ -196,7 +196,7 @@ describe('vhost(hostname, server)', function(){
       .expect(404, done);
     });
 
-    it('should populate req.vhost', function(done){
+    it('Should populate req.vhost', function(done){
       var app = createServer(/user-(bob|joe)\.([^\.]+)\.com/, function(req, res){
         var keys = Object.keys(req.vhost).sort();
         var arr = keys.map(function(k){ return [k, req.vhost[k]]; })
@@ -210,8 +210,8 @@ describe('vhost(hostname, server)', function(){
     });
   });
 
-  describe('with array hostname', function(){
-    it('should match using an array of strings', function(done){
+  describe('With array hostname', function(){
+    it('Should match using an array of strings', function(done){
       var domains = ['toki.com', 'www.toki.com', 'toki.org'];
 
       function next() {
@@ -233,7 +233,7 @@ describe('vhost(hostname, server)', function(){
       next();
     });
 
-    it('should match using an array of RegEx\'s and strings', function(done){
+    it('Should match using an array of RegEx\'s and strings', function(done){
       var domains = ['toki.com', 'www.toki.com', 'toki.org', 'www.toki.org', 'tobi.com', 'tabbi.com'];
       var tests = [/(?:www|)\.toki\.(?:com|org)/, 'tobi.com', 'tabbi.com'];
 

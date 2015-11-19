@@ -18,7 +18,6 @@ module.exports = vhost;
  * Module variables.
  * @private
  */
-
 var asteriskRegExp = /\*/g;
 var asteriskReplace = '([^\.]+)';
 var endAnchoredRegExp = /(?:^|[^\\])(?:\\\\)*\$$/;
@@ -33,7 +32,6 @@ var escapeReplace = '\\$1'
  * @return {Function}
  * @public
  */
-
 function vhost(hostname, handle) {
   if (!hostname) {
     throw new TypeError('argument hostname is required');
@@ -72,7 +70,6 @@ function vhost(hostname, handle) {
  * @return {string}
  * @private
  */
-
 function hostNameOf(req) {
   var host = req.headers.host;
 
@@ -97,7 +94,6 @@ function hostNameOf(req) {
  * @return {boolean}
  * @private
  */
-
 function isRegExp(val) {
   return Object.prototype.toString.call(val) === '[object RegExp]';
 }
@@ -109,7 +105,6 @@ function isRegExp(val) {
  * @return {boolean}
  * @private
  */
-
 function isArray(val) {
   return (Object.prototype.toString.call(val) === '[object Array]' );
 }
@@ -121,7 +116,6 @@ function isArray(val) {
  * @param (string|RegExp} val
  * @private
  */
-
 function hostRegExpGroup(val) {
   var source = !isRegExp(val)
       ? String(val).replace(escapeRegExp, escapeReplace).replace(asteriskRegExp, asteriskReplace)
@@ -146,7 +140,6 @@ function hostRegExpGroup(val) {
  * @param (string|RegExp} val
  * @private
  */
-
 function hostRegExp(val) {
   val = ((isArray(val))?val:[val]);
 
@@ -165,7 +158,6 @@ function hostRegExp(val) {
  * @return {object}
  * @private
  */
-
 function vhostOf(req, regexp) {
   var host = req.headers.host;
   var hostname = hostNameOf(req);

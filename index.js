@@ -48,10 +48,10 @@ function vhost(hostname, handle) {
   }
 
   // create regular expression for hostname
-  var regexp = hostregexp(hostname);
+  var regexp = hostRegExp(hostname);
 
   return function vhost(req, res, next) {
-    var vhostdata = vhostof(req, regexp);
+    var vhostdata = vhostOf(req, regexp);
 
     if (!vhostdata) {
       return next();
@@ -73,7 +73,7 @@ function vhost(hostname, handle) {
  * @private
  */
 
-function hostnameof(req) {
+function hostNameOf(req) {
   var host = req.headers.host;
 
   if (!host) {
@@ -98,7 +98,7 @@ function hostnameof(req) {
  * @private
  */
 
-function isregexp(val) {
+function isRegExp(val) {
   return Object.prototype.toString.call(val) === '[object RegExp]';
 }
 
@@ -110,7 +110,7 @@ function isregexp(val) {
  * @private
  */
 
-function isarray(val) {
+function isArray(val) {
   return (Object.prototype.toString.call(val) === '[object Array]' );
 }
 
@@ -122,8 +122,8 @@ function isarray(val) {
  * @private
  */
 
-function hostregexpgroup(val) {
-  var source = !isregexp(val)
+function hostRegExpGroup(val) {
+  var source = !isRegExp(val)
       ? String(val).replace(escapeRegExp, escapeReplace).replace(asteriskRegExp, asteriskReplace)
       : val.source;
 
@@ -147,11 +147,11 @@ function hostregexpgroup(val) {
  * @private
  */
 
-function hostregexp(val) {
-  val = ((isarray(val))?val:[val]);
+function hostRegExp(val) {
+  val = ((isArray(val))?val:[val]);
 
   var source = '^' + val.map(function(val) {
-    return hostregexpgroup(val);
+    return hostRegExpGroup(val);
   }).join('|') + '$';
 
   return new RegExp(source, 'i');
@@ -166,9 +166,9 @@ function hostregexp(val) {
  * @private
  */
 
-function vhostof(req, regexp) {
+function vhostOf(req, regexp) {
   var host = req.headers.host;
-  var hostname = hostnameof(req);
+  var hostname = hostNameOf(req);
 
   if (!hostname) {
     return;
